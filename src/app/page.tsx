@@ -5,13 +5,12 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
       <Nav />
-      <main>
+      <main className="snap-container">
         <Hero />
         <About />
         <Experience />
@@ -19,7 +18,6 @@ export default function Home() {
         <Blog />
         <Contact />
       </main>
-      <Footer />
     </>
   );
 }

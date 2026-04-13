@@ -1,37 +1,30 @@
-const posts = [
-  {
-    title: "Coming Soon",
-    date: "",
-    excerpt:
-      "I'm working on writing about product management, AI leverage in daily workflows, and lessons from building things as a student. Stay tuned.",
-    slug: null,
-  },
-];
+"use client";
+
+import { useInView } from "./useInView";
 
 export default function Blog() {
-  return (
-    <section id="blog" className="py-24 px-6 bg-card">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-sm font-mono text-accent tracking-wide mb-2">
-          04
-        </h2>
-        <h3 className="text-3xl font-bold text-foreground mb-10">Writing</h3>
+  const { ref, isVisible } = useInView(0.3);
 
-        <div className="space-y-6">
-          {posts.map((post, i) => (
-            <div
-              key={i}
-              className="border border-border rounded-xl p-6 hover:border-accent/30 transition-all"
-            >
-              <p className="text-xs text-muted mb-2">{post.date}</p>
-              <h4 className="text-lg font-semibold text-foreground mb-2">
-                {post.title}
-              </h4>
-              <p className="text-sm text-muted leading-relaxed">
-                {post.excerpt}
-              </p>
-            </div>
-          ))}
+  return (
+    <section id="blog" className="snap-section flex items-center px-6">
+      <div ref={ref} className="max-w-3xl mx-auto text-center">
+        <div className={`fade-up ${isVisible ? "visible" : ""}`}>
+          <p className="text-sm font-mono text-accent tracking-widest uppercase mb-4">
+            Writing
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold gradient-text mb-8">
+            Thoughts, soon.
+          </h2>
+        </div>
+        <div className={`fade-up ${isVisible ? "visible" : ""}`} style={{ transitionDelay: "0.15s" }}>
+          <p className="text-base text-muted leading-relaxed max-w-md mx-auto">
+            I'm working on writing about product management, AI leverage
+            in daily workflows, and lessons from building things as a student.
+          </p>
+          <div className="mt-10 inline-flex items-center gap-2 text-sm text-muted/50 font-mono">
+            <span className="w-2 h-2 rounded-full bg-accent/40 animate-pulse" />
+            Coming soon
+          </div>
         </div>
       </div>
     </section>

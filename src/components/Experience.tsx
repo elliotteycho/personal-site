@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import { useInView } from "./useInView";
+
 const experiences = [
   {
     company: "Simpli",
@@ -5,7 +10,7 @@ const experiences = [
     location: "New York, NY",
     dates: "Jan 2026 - Present",
     description:
-      "Leading a 3-person product team on an 8-week engagement with a venture-backed charity tech startup that has facilitated $70M+ in corporate donations. Owning end-to-end product discovery, conducting 15+ user interviews across $300K-$5M nonprofits, and building the PRD and MVP for a platform targeting 10-1,000 charities.",
+      "Leading a 3-person product team on an 8-week engagement with a venture-backed charity tech startup that has facilitated $70M+ in corporate donations. Owning end-to-end product discovery, conducting 15+ user interviews across nonprofits, and building the PRD and MVP for a platform targeting 10-1,000 charities.",
     tags: ["Product Management", "User Research", "PRD", "Stakeholder Alignment"],
   },
   {
@@ -47,39 +52,60 @@ const experiences = [
 ];
 
 export default function Experience() {
-  return (
-    <section id="experience" className="py-24 px-6 bg-card">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-sm font-mono text-accent tracking-wide mb-2">
-          02
-        </h2>
-        <h3 className="text-3xl font-bold text-foreground mb-10">
-          Experience
-        </h3>
+  const [activeIndex, setActiveIndex] = useState(0);
+  const { ref, isVisible } = useInView(0.2);
 
-        <div className="space-y-8">
-          {experiences.map((exp) => (
+  return (
+    <section id="experience" className="snap-section flex items-center px-6">
+      <div ref={ref} className="max-w-4xl mx-auto w-full">
+        <div className={`fade-up ${isVisible ? "visible" : ""}`}>
+          <p className="text-sm font-mono text-accent tracking-widest uppercase mb-4">
+            Experience
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold gradient-text mb-10">
+            Where I've worked.
+          </h2>
+        </div>
+
+        <div className={`flex flex-col md:flex-row gap-8 fade-up ${isVisible ? "visible" : ""}`} style={{ transitionDelay: "0.15s" }}>
+          {/* Company tabs */}
+          <div className="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible md:min-w-[180px] shrink-0">
+            {experiences.map((exp, i) => (
+              <button
+                key={exp.company}
+                onClick={() => setActiveIndex(i)}
+                className={`text-left text-sm font-mono px-4 py-3 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                  activeIndex === i
+                    ? "bg-accent-light text-accent border-l-2 border-accent"
+                    : "text-muted hover:text-foreground hover:bg-card"
+                }`}
+              >
+                {exp.company}
+              </button>
+            ))}
+          </div>
+
+          {/* Active experience detail */}
+          <div className="flex-1 min-h-[280px]">
             <div
-              key={exp.company}
-              className="group border border-border rounded-xl p-6 hover:border-accent/30 hover:shadow-sm transition-all"
+              key={activeIndex}
+              className="animate-fade-in"
+              style={{ animation: "fadeIn 0.4s ease-out" }}
             >
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-3">
-                <div>
-                  <h4 className="text-lg font-semibold text-foreground">
-                    {exp.company}
-                  </h4>
-                  <p className="text-sm text-accent">{exp.role}</p>
-                </div>
-                <div className="text-sm text-muted text-right shrink-0">
-                  <p>{exp.dates}</p>
-                  <p>{exp.location}</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted leading-relaxed mb-4">
-                {exp.description}
+              <h3 className="text-xl font-semibold text-foreground">
+                {experiences[activeIndex].role}
+              </h3>
+              <p className="text-sm text-accent mt-1 font-mono">
+                {experiences[activeIndex].company}
               </p>
-              <div className="flex flex-wrap gap-2">
-                {exp.tags.map((tag) => (
+              <p className="text-xs text-muted mt-1">
+                {experiences[activeIndex].dates} &middot; {experiences[activeIndex].location}
+              </p>
+              <p className="text-sm text-muted leading-relaxed mt-5">
+                {experiences[activeIndex].description}
+              </p>
+              <div className="flex flex-wrap gap-2 mt-5">
+                {experiences[activeIndex].tags.map((tag) => (
                   <span
                     key={tag}
                     className="text-xs px-2.5 py-1 rounded-full bg-accent-light text-accent font-medium"
@@ -89,9 +115,16 @@ export default function Experience() {
                 ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </section>
   );
 }
